@@ -7,18 +7,19 @@ const initialList = [
   { id: 2, title: 'Terracotta Army', seen: true },
 ];
 
+// Utility function to deeply clone the initial list
+const cloneList = (list) => list.map(item => ({ ...item }));
+
 export default function BucketList() {
-  const [myList, setMyList] = useState(initialList);
-  const [yourList, setYourList] = useState(
-    initialList
-  );
+  const [myList, setMyList] = useState(cloneList(initialList));
+  const [yourList, setYourList] = useState(cloneList(initialList));
 
   function handleToggleMyList(artworkId, nextSeen) {
     const tmpList = myList.map(e => {
         if (e.id === artworkId) {
-            e.seen = nextSeen
+            return { ...e, seen: nextSeen }; // Return a new object
         }
-        return e
+        return e;
     });
     setMyList(tmpList);
   }
@@ -26,9 +27,9 @@ export default function BucketList() {
   function handleToggleYourList(artworkId, nextSeen) {
     const tmpList = yourList.map(e => {
         if (e.id === artworkId) {
-            e.seen = nextSeen
+            return { ...e, seen: nextSeen }; // Return a new object
         }
-        return e
+        return e;
     });
     setYourList(tmpList);
   }
@@ -57,12 +58,7 @@ function ItemList({ artworks, onToggle }) {
             <input
               type="checkbox"
               checked={artwork.seen}
-              onChange={e => {
-                onToggle(
-                  artwork.id,
-                  e.target.checked
-                );
-              }}
+              onChange={e => onToggle(artwork.id, e.target.checked)}
             />
             {artwork.title}
           </label>
